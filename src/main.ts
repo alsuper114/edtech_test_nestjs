@@ -10,8 +10,6 @@ import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import validationOptions from './utils/validation-options';
 import { AllConfigType } from './config/config.type';
-import * as cacheManager from 'cache-manager';
-import { redisStore } from 'cache-manager-redis-store';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });

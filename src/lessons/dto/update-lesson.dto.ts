@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateLessonDto {
-  @ApiProperty({example: 'Chapter1-Section1'})
+  @ApiProperty({ example: 'Chapter1-Section1' })
   @IsNotEmpty()
   title: string;
 

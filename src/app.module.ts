@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CacheModule } from '@nestjs/cache-manager'
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
@@ -17,10 +16,7 @@ import { LessonsModule } from './lessons/lessons.module';
 import { LessonUserNoteModule } from './lesson-user-note/lesson-user-note.module';
 import { QuizesModule } from './quizes/quizes.module';
 import { UserQuizeScoreModule } from './user-quize-score/user-quize-score.module';
-import { ReportController } from './report/report.controller';
-import { ReportService } from './report/report.service';
 import { ReportModule } from './report/report.module';
-import * as redisStore from 'cache-manager-redis-store';
 import redisConfig from './config/redis.config';
 
 @Module({
@@ -45,7 +41,7 @@ import redisConfig from './config/redis.config';
     LessonUserNoteModule,
     QuizesModule,
     UserQuizeScoreModule,
-    ReportModule
+    ReportModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

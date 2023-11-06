@@ -1,10 +1,6 @@
 import request from 'supertest';
-import {
-  APP_URL,
-  TESTER_EMAIL,
-  TESTER_PASSWORD,
-} from '../utils/constants';
-import { setupContinuousIntegrationTest, truncateTables } from 'test/utils/setup-ci-integration';
+import { TESTER_EMAIL, TESTER_PASSWORD } from '../utils/constants';
+import { setupContinuousIntegrationTest } from 'test/utils/setup-ci-integration';
 import { INestApplication } from '@nestjs/common';
 
 describe('Auth user (e2e)', () => {
@@ -22,7 +18,7 @@ describe('Auth user (e2e)', () => {
     return request(app.getHttpServer())
       .post('/auth/email/login')
       .send({ email: TESTER_EMAIL, password: TESTER_PASSWORD })
-      .expect(200)
+      .expect(200);
   });
 
   it('Do not allow register user with exists email: /auth/email/register (POST)', () => {
@@ -34,7 +30,7 @@ describe('Auth user (e2e)', () => {
         firstName: 'Tester',
         lastName: 'E2E',
       })
-      .expect(400)
+      .expect(400);
   });
 
   it('Register new user: /auth/email/register (POST)', async () => {
@@ -53,14 +49,14 @@ describe('Auth user (e2e)', () => {
     return request(app.getHttpServer())
       .post('/auth/email/login')
       .send({ email: newUserEmail, password: newUserPassword })
-      .expect(200)
+      .expect(200);
   });
 
   it('Login confirmed user: /auth/email/login (POST)', () => {
     return request(app.getHttpServer())
       .post('/auth/email/login')
       .send({ email: newUserEmail, password: newUserPassword })
-      .expect(200)
+      .expect(200);
   });
 
   it('Confirmed user retrieve profile: /auth/me (GET)', async () => {
@@ -75,7 +71,7 @@ describe('Auth user (e2e)', () => {
         type: 'bearer',
       })
       .send()
-      .expect(200)
+      .expect(200);
   });
 
   it('Refresh token: /auth/refresh (GET)', async () => {
@@ -151,9 +147,11 @@ describe('Auth user (e2e)', () => {
       .send({ email: newUserEmail, password: newUserPassword })
       .then(({ body }) => body.token);
 
-    await request(app.getHttpServer()).delete('/auth/me').auth(newUserApiToken, {
-      type: 'bearer',
-    });
+    await request(app.getHttpServer())
+      .delete('/auth/me')
+      .auth(newUserApiToken, {
+        type: 'bearer',
+      });
 
     return request(app.getHttpServer())
       .post('/auth/email/login')

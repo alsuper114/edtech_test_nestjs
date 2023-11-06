@@ -25,7 +25,6 @@ import { User } from './entities/user.entity';
 import { InfinityPaginationResultType } from '../utils/types/infinity-pagination-result.type';
 import { NullableType } from '../utils/types/nullable.type';
 import { QueryUserDto } from './dto/query-user.dto';
-import { AddLessonDto } from './dto/add-lesson.dto';
 
 @ApiBearerAuth()
 @Roles(RoleEnum.admin)
@@ -100,5 +99,4 @@ export class UsersController {
   remove(@Param('id') id: number): Promise<void> {
     return this.usersService.softDelete(id);
   }
-
 }

@@ -13,9 +13,7 @@ import { AuthUpdateDto } from './dto/auth-update.dto';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { RoleEnum } from 'src/roles/roles.enum';
 import crypto from 'crypto';
-import { plainToClass } from 'class-transformer';
 import { Role } from 'src/roles/entities/role.entity';
-import { AuthProvidersEnum } from './auth-providers.enum';
 import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { UsersService } from 'src/users/users.service';
 import { NullableType } from '../utils/types/nullable.type';
@@ -42,7 +40,6 @@ export class AuthService {
     });
 
     if (!user) {
-      
       throw new HttpException(
         {
           status: HttpStatus.UNPROCESSABLE_ENTITY,

@@ -10,9 +10,14 @@ import { Quize } from 'src/quizes/entities/quize.entity';
 import { Lesson } from 'src/lessons/entities/lesson.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserQuizeScore, Quize, Lesson]), UsersModule, QuizesModule, LessonsModule],
+  imports: [
+    TypeOrmModule.forFeature([UserQuizeScore, Quize, Lesson]),
+    UsersModule,
+    QuizesModule,
+    LessonsModule,
+  ],
   controllers: [UserQuizeScoreController],
   providers: [UserQuizeScoreService],
-  exports: [UserQuizeScoreService]
+  exports: [UserQuizeScoreService],
 })
 export class UserQuizeScoreModule {}

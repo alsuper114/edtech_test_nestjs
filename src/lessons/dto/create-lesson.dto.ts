@@ -6,11 +6,11 @@ export class CreateLessonDto {
   @IsNotEmpty()
   chapter: number;
 
-  @ApiProperty({example: 1})
+  @ApiProperty({ example: 1 })
   @IsNotEmpty()
   section: number;
 
-  @ApiProperty({example: 'Chapter1-Section1'})
+  @ApiProperty({ example: 'Chapter1-Section1' })
   @IsNotEmpty()
   title: string;
 

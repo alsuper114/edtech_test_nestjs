@@ -1,12 +1,15 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AllConfigType } from 'src/config/config.type';
 import { FileEntity } from './entities/file.entity';
-import { LessonsService } from 'src/lessons/lessons.service';
 import { Lesson } from 'src/lessons/entities/lesson.entity';
-// import { Lesson } from 'src/lessons/entities/lesson.entity';
 
 @Injectable()
 export class FilesService {
@@ -15,19 +18,18 @@ export class FilesService {
     @InjectRepository(FileEntity)
     private readonly fileRepository: Repository<FileEntity>,
     @InjectRepository(Lesson)
-    private readonly lessonRepository: Repository<Lesson>
+    private readonly lessonRepository: Repository<Lesson>,
   ) {}
 
   async uploadFile(
     file: Express.Multer.File | Express.MulterS3.File,
-    lessonId: number
+    lessonId: number,
   ): Promise<FileEntity> {
-
     const lesson = await this.lessonRepository.findOneBy({
-      id: lessonId
+      id: lessonId,
     });
 
-    if(!lesson) {
+    if (!lesson) {
       throw new NotFoundException(`Lesson for ${lessonId} is not exist!`);
     }
 
@@ -50,11 +52,13 @@ export class FilesService {
       s3: (file as Express.MulterS3.File).location,
     };
 
-    await this.lessonRepository.update({id: lessonId}, {
-      videoLink: path[
-        this.configService.getOrThrow('file.driver', { infer: true })
-      ],
-    });
+    await this.lessonRepository.update(
+      { id: lessonId },
+      {
+        videoLink:
+          path[this.configService.getOrThrow('file.driver', { infer: true })],
+      },
+    );
 
     return this.fileRepository.save(
       this.fileRepository.create({

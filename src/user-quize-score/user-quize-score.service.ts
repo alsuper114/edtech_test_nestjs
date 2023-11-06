@@ -9,61 +9,59 @@ import { LessonsService } from 'src/lessons/lessons.service';
 
 @Injectable()
 export class UserQuizeScoreService {
+  constructor(
+    @InjectRepository(UserQuizeScore)
+    private readonly userQuizeScoreRepository: Repository<UserQuizeScore>,
+    @Inject(UsersService)
+    private readonly userService: UsersService,
+    @Inject(QuizesService)
+    private readonly quizeService: QuizesService,
+    @Inject(LessonsService)
+    private readonly lessonService: LessonsService,
+  ) {}
 
-    constructor(
-        @InjectRepository(UserQuizeScore)
-        private readonly userQuizeScoreRepository: Repository<UserQuizeScore>,
-        @Inject(UsersService)
-        private readonly userService: UsersService,
-        @Inject(QuizesService)
-        private readonly quizeService: QuizesService,
-        @Inject(LessonsService)
-        private readonly lessonService: LessonsService
+  public async setScore(payload: SetScoreDto): Promise<UserQuizeScore> {
+    const user = await this.userService.findOne({ id: payload.userId });
 
-    ) {}
-
-    public async setScore(payload: SetScoreDto): Promise<UserQuizeScore> {
-        const user = await this.userService.findOne({id: payload.userId});
-
-        if(!user) {
-            throw new NotFoundException(`User for ${payload.userId} doesn't exist`);
-        }
-
-        const quiz = await this.quizeService.getQuizeById(payload.quizeId);
-
-        if(!quiz) {
-            throw new NotFoundException(`Quiz for ${payload.quizeId} doesn't exist`);
-        }
-
-        let score = 0;
-        if(quiz.answer === payload.userAnswer) {
-            score = quiz.score;
-        }
-
-        const obj = this.userQuizeScoreRepository.create({
-            quize: quiz,
-            user: user,
-            userScore: score,
-        });
-
-        return await this.userQuizeScoreRepository.save(obj);
+    if (!user) {
+      throw new NotFoundException(`User for ${payload.userId} doesn't exist`);
     }
 
-    public async getScores(userId: number, lessonId: number): Promise<any[]> {
-        const quizes = (await this.lessonService.getQuizesByLessonId(lessonId)).quizes;
+    const quiz = await this.quizeService.getQuizeById(payload.quizeId);
 
-        const quizeIdList = quizes.map((quiz) => {
-            return quiz.id
-        });
-
-        const scores = await this.userQuizeScoreRepository.find({
-            where: {
-                userId,
-                quizeId: In(quizeIdList)
-            }
-        });
-
-        return scores;
+    if (!quiz) {
+      throw new NotFoundException(`Quiz for ${payload.quizeId} doesn't exist`);
     }
 
+    let score = 0;
+    if (quiz.answer === payload.userAnswer) {
+      score = quiz.score;
+    }
+
+    const obj = this.userQuizeScoreRepository.create({
+      quize: quiz,
+      user: user,
+      userScore: score,
+    });
+
+    return await this.userQuizeScoreRepository.save(obj);
+  }
+
+  public async getScores(userId: number, lessonId: number): Promise<any[]> {
+    const quizes = (await this.lessonService.getQuizesByLessonId(lessonId))
+      .quizes;
+
+    const quizeIdList = quizes.map((quiz) => {
+      return quiz.id;
+    });
+
+    const scores = await this.userQuizeScoreRepository.find({
+      where: {
+        userId,
+        quizeId: In(quizeIdList),
+      },
+    });
+
+    return scores;
+  }
 }

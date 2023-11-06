@@ -97,7 +97,7 @@ import { Lesson } from 'src/lessons/entities/lesson.entity';
         };
       },
     }),
-    LessonsModule
+    LessonsModule,
   ],
   controllers: [FilesController],
   providers: [ConfigModule, ConfigService, FilesService],

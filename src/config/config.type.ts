@@ -52,4 +52,4 @@ export type AllConfigType = {
 export type RedisConfig = {
   redisHost: string;
   redisPort: string;
-}
+};

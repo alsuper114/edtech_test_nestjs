@@ -7,9 +7,12 @@ import { LessonsModule } from 'src/lessons/lessons.module';
 import { Lesson } from 'src/lessons/entities/lesson.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Quize, Lesson]), forwardRef(() => LessonsModule)],
+  imports: [
+    TypeOrmModule.forFeature([Quize, Lesson]),
+    forwardRef(() => LessonsModule),
+  ],
   controllers: [QuizesController],
   providers: [QuizesService],
-  exports: [QuizesService]
+  exports: [QuizesService],
 })
 export class QuizesModule {}

@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateQuizeDto } from './dto/create-quize.dto';
 import { Quize } from './entities/quize.entity';
 import { QuizesService } from './quizes.service';
@@ -8,26 +17,23 @@ import { RoleEnum } from 'src/roles/roles.enum';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/roles/roles.guard';
 
-// @ApiBearerAuth()
-// @Roles(RoleEnum.admin)
-// @UseGuards(AuthGuard('jwt'), RolesGuard)
+@ApiBearerAuth()
+@Roles(RoleEnum.admin)
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 @ApiTags('Quizes')
-@Controller({path: 'quizes', version: '1'})
+@Controller({ path: 'quizes', version: '1' })
 export class QuizesController {
+  constructor(private readonly quizeService: QuizesService) {}
 
-    constructor(
-        private readonly quizeService: QuizesService
-    ) {}
+  @Post()
+  @HttpCode(HttpStatus.OK)
+  async createQuize(@Body() payload: CreateQuizeDto): Promise<Quize> {
+    return await this.quizeService.createQuize(payload);
+  }
 
-    @Post()
-    @HttpCode(HttpStatus.OK)
-    async createQuize(@Body() payload: CreateQuizeDto): Promise<Quize> {
-        return await this.quizeService.createQuize(payload);
-    }
-
-    @Get('/:id')
-    @HttpCode(HttpStatus.OK)
-    async getQuizeById(@Param('id') id: number): Promise<Quize> {
-        return await this.quizeService.getQuizeById(id); 
-    }
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  async getQuizeById(@Param('id') id: number): Promise<Quize> {
+    return await this.quizeService.getQuizeById(id);
+  }
 }

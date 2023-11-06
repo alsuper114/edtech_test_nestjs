@@ -20,10 +20,10 @@ export class UserSeedService {
       },
     });
 
-    const admins = await this.repository.find()
+    await this.repository.find();
 
     if (!countAdmin) {
-      const createResult = await this.repository.save(
+      await this.repository.save(
         this.repository.create({
           firstName: 'Super',
           lastName: 'Admin',
@@ -35,7 +35,6 @@ export class UserSeedService {
           },
         }),
       );
-
     }
 
     const countUser = await this.repository.count({

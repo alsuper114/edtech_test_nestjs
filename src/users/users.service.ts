@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityCondition } from 'src/utils/types/entity-condition.type';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
@@ -7,18 +7,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { NullableType } from '../utils/types/nullable.type';
 import { FilterUserDto, SortUserDto } from './dto/query-user.dto';
-import { AddLessonDto } from './dto/add-lesson.dto';
-import { Lesson } from 'src/lessons/entities/lesson.entity';
-import { LessonsService } from 'src/lessons/lessons.service';
-import { LessonUserNote } from 'src/lesson-user-note/entities/lesson-user-note.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    
-  ) { }
+  ) {}
 
   create(createProfileDto: CreateUserDto): Promise<User> {
     return this.usersRepository.save(
@@ -57,14 +52,12 @@ export class UsersService {
   }
 
   findOne(fields: EntityCondition<User>): Promise<NullableType<User>> {
-
     return this.usersRepository.findOne({
       where: fields,
     });
   }
 
   async update(id: User['id'], payload: DeepPartial<User>): Promise<User> {
-
     const user = await this.usersRepository.findOneBy({ id });
 
     if (!user) {

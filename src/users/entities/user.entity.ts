@@ -10,16 +10,12 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
-  ManyToMany,
-  JoinTable,
   OneToMany,
 } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 import bcrypt from 'bcryptjs';
 import { EntityHelper } from 'src/utils/entity-helper';
-import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';
 import { Exclude, Expose } from 'class-transformer';
-import { Lesson } from 'src/lessons/entities/lesson.entity';
 import { FileEntity } from 'src/files/entities/file.entity';
 import { LessonUserNote } from 'src/lesson-user-note/entities/lesson-user-note.entity';
 import { UserQuizeScore } from 'src/user-quize-score/entity/user-quize-score.entity';
@@ -74,11 +70,11 @@ export class User extends EntityHelper {
   })
   role?: Role | null;
 
-  @OneToMany(() => LessonUserNote, lessonUserNote => lessonUserNote.user)
-  lessonUserNotes: LessonUserNote[]
+  @OneToMany(() => LessonUserNote, (lessonUserNote) => lessonUserNote.user)
+  lessonUserNotes: LessonUserNote[];
 
-  @OneToMany(() => UserQuizeScore, userQuizeScore => userQuizeScore.quize)
-  userQuizeScores: UserQuizeScore[]
+  @OneToMany(() => UserQuizeScore, (userQuizeScore) => userQuizeScore.quize)
+  userQuizeScores: UserQuizeScore[];
 
   @Column({ type: String, nullable: true })
   @Index()

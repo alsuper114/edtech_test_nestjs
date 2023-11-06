@@ -1,7 +1,10 @@
 import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
-import { ADMIN_EMAIL, ADMIN_PASSWORD, APP_URL } from '../utils/constants';
-import { setupContinuousIntegrationTest, truncateTables } from '../utils/setup-ci-integration';
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from '../utils/constants';
+import {
+  setupContinuousIntegrationTest,
+  truncateTables,
+} from '../utils/setup-ci-integration';
 
 describe('Auth admin (e2e)', () => {
   let app: INestApplication;
@@ -13,7 +16,7 @@ describe('Auth admin (e2e)', () => {
   afterAll(async () => {
     await truncateTables();
     await app.close();
-  })
+  });
 
   it.only('Login: /api/v1/auth/email/login (POST)', async () => {
     return await request(app.getHttpServer())

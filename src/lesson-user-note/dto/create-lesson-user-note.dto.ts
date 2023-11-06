@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateLessonUserNoteDto {
-  @ApiProperty({example: 'Chapter1-Section1-User1-Note1'})
+  @ApiProperty({ example: 'Chapter1-Section1-User1-Note1' })
   @IsOptional()
   content?: string;
 
@@ -12,12 +12,11 @@ export class CreateLessonUserNoteDto {
 }
 
 export class UpdateLessonUserNoteDto {
-    @ApiProperty({example: 'Chapter1-Section1-User1-Note1'})
-    @IsOptional()
-    content?: string;
-  
-    @ApiProperty({ example: 12930232 })
-    @IsNotEmpty()
-    position: number;
-  }
-  
+  @ApiProperty({ example: 'Chapter1-Section1-User1-Note1' })
+  @IsOptional()
+  content?: string;
+
+  @ApiProperty({ example: 12930232 })
+  @IsNotEmpty()
+  position: number;
+}
