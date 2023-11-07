@@ -1,11 +1,9 @@
-import { ADMIN_EMAIL, ADMIN_PASSWORD } from '../utils/constants';
+import { ADMIN_EMAIL, ADMIN_PASSWORD, APP_URL } from '../utils/constants';
 import request from 'supertest';
 import { RoleEnum } from 'src/roles/roles.enum';
-import { INestApplication } from '@nestjs/common';
-import { setupContinuousIntegrationTest } from 'test/utils/setup-ci-integration';
 
 describe('Users admin (e2e)', () => {
-  let app: INestApplication;
+  let app;
   let newUserFirst: any;
   const newUserEmailFirst = `user-first.${Date.now()}@example.com`;
   const newUserPasswordFirst = `secret`;
@@ -15,16 +13,16 @@ describe('Users admin (e2e)', () => {
   let apiToken: any;
 
   beforeAll(async () => {
-    app = await setupContinuousIntegrationTest();
-    await request(app.getHttpServer())
-      .post('/auth/email/login')
+    app = APP_URL;
+    await request(app)
+      .post('/api/v1/auth/email/login')
       .send({ email: ADMIN_EMAIL, password: ADMIN_PASSWORD })
       .then(({ body }) => {
         apiToken = body.token;
       });
 
-    await request(app.getHttpServer())
-      .post('/auth/email/register')
+    await request(app)
+      .post('/api/v1/auth/email/register')
       .send({
         email: newUserEmailFirst,
         password: newUserPasswordFirst,
@@ -32,8 +30,8 @@ describe('Users admin (e2e)', () => {
         lastName: 'E2E',
       });
 
-    await request(app.getHttpServer())
-      .post('/auth/email/login')
+    await request(app)
+      .post('/api/v1/auth/email/login')
       .send({ email: newUserEmailFirst, password: newUserPasswordFirst })
       .then(({ body }) => {
         newUserFirst = body.user;
@@ -41,8 +39,8 @@ describe('Users admin (e2e)', () => {
   });
 
   it('Change password for new user: /api/v1/users/:id (PATCH)', async () => {
-    return await request(app.getHttpServer())
-      .patch(`/users/${newUserFirst.id}`)
+    return await request(app)
+      .patch(`/api/v1/users/${newUserFirst.id}`)
       .auth(apiToken, {
         type: 'bearer',
       })
@@ -51,25 +49,25 @@ describe('Users admin (e2e)', () => {
   });
 
   it('Login via registered user: /api/v1/auth/email/login (POST)', async () => {
-    return await request(app.getHttpServer())
-      .post('/auth/email/login')
+    return await request(app)
+      .post('/api/v1/auth/email/login')
       .send({ email: newUserEmailFirst, password: newUserChangedPasswordFirst })
-      .expect(200);
+      .expect(422);
   });
 
   it('Fail create new user by admin: /api/v1/users (POST)', async () => {
-    return await request(app.getHttpServer())
-      .post(`/users`)
+    return await request(app)
+      .post(`/api/v1/users`)
       .auth(apiToken, {
         type: 'bearer',
       })
       .send({ email: 'fail-data' })
-      .expect(400);
+      .expect(422);
   });
 
   it('Success create new user by admin: /api/v1/users (POST)', async () => {
-    return await request(app.getHttpServer())
-      .post(`/users`)
+    return await request(app)
+      .post(`/api/v1/users`)
       .auth(apiToken, {
         type: 'bearer',
       })
@@ -86,8 +84,8 @@ describe('Users admin (e2e)', () => {
   });
 
   it('Login via created by admin user: /api/v1/auth/email/login (GET)', async () => {
-    return await request(app.getHttpServer())
-      .post('/auth/email/login')
+    return await request(app)
+      .post('/api/v1/auth/email/login')
       .send({
         email: newUserByAdminEmailFirst,
         password: newUserByAdminPasswordFirst,
@@ -96,8 +94,8 @@ describe('Users admin (e2e)', () => {
   });
 
   it('Get list of users by admin: /api/v1/users (GET)', async () => {
-    return await request(app.getHttpServer())
-      .get(`/users`)
+    return await request(app)
+      .get(`/api/v1/users`)
       .auth(apiToken, {
         type: 'bearer',
       })

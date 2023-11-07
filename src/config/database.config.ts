@@ -86,7 +86,7 @@ export default registerAs<DatabaseConfig>('database', () => {
     password: process.env.DATABASE_PASSWORD,
     name: ['0', undefined].includes(process.env.JEST_WORKER_ID)
       ? process.env.DATABASE_NAME
-      : process.env.TEST_DATABASE_NAME,
+      : process.env.DATABASE_NAME,
     username: process.env.DATABASE_USERNAME,
     synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
     maxConnections: process.env.DATABASE_MAX_CONNECTIONS
