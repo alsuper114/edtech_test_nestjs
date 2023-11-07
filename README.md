@@ -98,10 +98,18 @@ npm run seed:run
 ```
 
 ## Tests
-
+Before Test for E2E, it can be done by:
 ```bash
 # e2e tests
+npm run schema:drop
+npm run migration:run
+npm run seed:run
 npm run test:e2e
+```
+Before this, supertest requires server to be run. Therefore, before running the test, please don't forget to run the application.
+
+```bash
+    npm run start:dev
 ```
 
 ## Tests in Docker

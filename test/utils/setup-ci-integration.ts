@@ -7,7 +7,6 @@ import { AppModule } from 'src/app.module';
 import {
   Connection,
   DatabaseType,
-  EntityMetadata,
   createConnection,
   getConnection,
   getConnectionManager,
@@ -63,7 +62,9 @@ export async function setupContinuousIntegrationTest() {
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  const connection = await getDBConnection(process.env.DATABASE_NAME ?? 'edTech');
+  const connection = await getDBConnection(
+    process.env.DATABASE_NAME ?? 'edTech',
+  );
   await connection.runMigrations();
 
   const roleSeedService = app.get(RoleSeedService);
@@ -81,7 +82,9 @@ export const truncateTables = async (): Promise<void> => {
     const connection = getConnection(process.env.DATABASE_NAME ?? 'edTech');
     const entities = connection.entityMetadatas;
     for await (const entity of entities) {
-      const repository = connection.getRepository(entity.name === "lesson" ? "lesson" : "");
+      const repository = connection.getRepository(
+        entity.name === 'lesson' ? 'lesson' : '',
+      );
 
       const tableExisted = await repository.manager.query(
         `SELECT EXISTS (SELECT FROM pg_tables WHERE tablename = '${entity.tableName}');`,
