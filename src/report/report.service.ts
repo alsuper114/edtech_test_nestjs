@@ -63,7 +63,6 @@ export class ReportService {
                 quizeId: quiz.id,
               },
             });
-            console.log('userScore is ', userId, quiz.id);
             if (userScore) {
               score = userScore.userScore;
             }
